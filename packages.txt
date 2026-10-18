@@ -1,0 +1,3 @@
+# Linux system libraries needed by OpenCV/MediaPipe on Streamlit Community Cloud.
+libgl1
+libglib2.0-0

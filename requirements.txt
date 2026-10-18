@@ -1,0 +1,20 @@
+# Glowie (skincare assistant) — packages needed to run the app (Python 3.11).
+# Install with:   pip install -r requirements.txt
+# Exact tested versions are in requirements-lock.txt.
+
+# Web interface
+# 1.50 is pinned: newer versions (1.60+) failed to show images on Windows in testing.
+streamlit==1.50.0
+
+# Face detection + Face Mesh landmarks (0.10.14 still has the "mp.solutions" API used here).
+# It brings its own OpenCV ("opencv-contrib-python").
+mediapipe==0.10.14
+opencv-contrib-python==4.10.0.84
+
+# Maths, colour analysis (LAB) and K-means clustering. MediaPipe 0.10.14 needs NumPy 1.x.
+numpy>=1.26,<2
+scikit-learn>=1.4,<1.6
+Pillow>=10.0
+
+# PDF report
+fpdf2>=2.7,<3

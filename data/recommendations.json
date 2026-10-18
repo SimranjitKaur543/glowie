@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "about": "Rules for Glowie (skincare assistant). General, cosmetic-level guidance only — not medical advice. Edit freely: the app reads this file every time.",
+
+  "step_order": {
+    "cleanser": 10,
+    "toner": 20,
+    "treatment": 30,
+    "eye": 40,
+    "moisturizer": 50,
+    "sunscreen": 60
+  },
+
+  "skin_types": {
+    "oily": {
+      "label": "Oily",
+      "description": "Shiny all over a few hours after washing; pores may look larger.",
+      "morning": [
+        {"step": "cleanser", "product": "Gentle gel or foaming cleanser", "why": "Removes overnight oil without stripping the skin."},
+        {"step": "moisturizer", "product": "Light, oil-free gel moisturiser", "why": "Oily skin still needs water-based hydration; dehydrated skin can make more oil."},
+        {"step": "sunscreen", "product": "Broad-spectrum SPF 30+ gel or fluid (non-comedogenic)", "why": "Protects against sun damage without feeling greasy."}
+      ],
+      "night": [
+        {"step": "cleanser", "product": "Gentle gel or foaming cleanser", "why": "Removes sunscreen, oil and dirt from the day."},
+        {"step": "moisturizer", "product": "Light, oil-free gel moisturiser", "why": "Keeps skin hydrated overnight."}
+      ],
+      "ingredients": ["Niacinamide", "Hyaluronic acid"],
+      "avoid": ["Heavy oils and thick butters (e.g. coconut oil, cocoa butter) on the face", "Harsh alcohol-based toners that over-dry and can trigger more oil"]
+    },
+    "dry": {
+      "label": "Dry",
+      "description": "Feels tight, rough or flaky, especially after washing.",
+      "morning": [
+        {"step": "cleanser", "product": "Creamy, non-foaming cleanser (or just lukewarm water)", "why": "Cleans without removing the skin's natural oils."},
+        {"step": "moisturizer", "product": "Rich moisturiser with ceramides and glycerin", "why": "Repairs the skin barrier and locks in water."},
+        {"step": "sunscreen", "product": "Broad-spectrum SPF 30+ cream", "why": "Protects against sun damage; creams add extra moisture."}
+      ],
+      "night": [
+        {"step": "cleanser", "product": "Creamy, non-foaming cleanser", "why": "Removes sunscreen gently."},
+        {"step": "treatment", "product": "Hyaluronic acid serum on damp skin", "why": "Draws water into the skin."},
+        {"step": "moisturizer", "product": "Rich moisturiser or barrier cream", "why": "Seals in moisture overnight."}
+      ],
+      "ingredients": ["Ceramides", "Hyaluronic acid", "Glycerin", "Squalane"],
+      "avoid": ["Foaming cleansers with SLS (sodium lauryl sulfate)", "Alcohol-based toners", "Very hot water and long hot showers"]
+    },
+    "normal": {
+      "label": "Normal",
+      "description": "Comfortable most of the day — not very shiny, not tight.",
+      "morning": [
+        {"step": "cleanser", "product": "Gentle, pH-balanced cleanser", "why": "Keeps skin clean without upsetting its balance."},
+        {"step": "moisturizer", "product": "Light lotion moisturiser", "why": "Maintains hydration."},
+        {"step": "sunscreen", "product": "Broad-spectrum SPF 30+", "why": "The most important anti-ageing and anti-spot step."}
+      ],
+      "night": [
+        {"step": "cleanser", "product": "Gentle, pH-balanced cleanser", "why": "Removes sunscreen and dirt."},
+        {"step": "moisturizer", "product": "Light lotion or cream moisturiser", "why": "Supports the skin barrier overnight."}
+      ],
+      "ingredients": ["Hyaluronic acid", "Niacinamide"],
+      "avoid": ["Over-exfoliating (more than 2–3 times a week)"]
+    },
+    "combination": {
+      "label": "Combination",
+      "description": "Oily on the forehead, nose and chin (T-zone) but normal or dry on the cheeks.",
+      "morning": [
+        {"step": "cleanser", "product": "Gentle gel cleanser", "why": "Controls T-zone oil without drying the cheeks."},
+        {"step": "moisturizer", "product": "Light gel-cream moisturiser (a little extra on dry areas)", "why": "Balances oily and dry areas."},
+        {"step": "sunscreen", "product": "Broad-spectrum SPF 30+ fluid", "why": "Lightweight sun protection for the whole face."}
+      ],
+      "night": [
+        {"step": "cleanser", "product": "Gentle gel cleanser", "why": "Removes the day's oil and sunscreen."},
+        {"step": "moisturizer", "product": "Light gel-cream moisturiser (richer cream only on dry patches)", "why": "Gives each area what it needs."}
+      ],
+      "ingredients": ["Niacinamide", "Hyaluronic acid"],
+      "avoid": ["Heavy creams on the T-zone", "Harsh scrubs"]
+    }
+  },
+
+  "concerns": {
+    "acne": {
+      "label": "Acne / breakouts",
+      "morning": [],
+      "night": [
+        {"step": "treatment", "product": "Salicylic acid (BHA) 0.5–2% leave-on product", "why": "Gets inside pores and helps unclog them.", "start": "Start 2–3 nights a week, then increase if your skin is comfortable."}
+      ],
+      "ingredients": ["Salicylic acid (BHA)", "Niacinamide", "Azelaic acid"],
+      "avoid": ["Picking or squeezing spots", "Pore-clogging oils and butters", "Rough scrubs on active breakouts"],
+      "tips": ["Change pillowcases 1–2 times a week and keep phone screens clean.", "Look for products labelled \"non-comedogenic\".", "Give acne products 6–8 weeks before judging results."]
+    },
+    "dark_spots": {
+      "label": "Dark spots / uneven tone",
+      "morning": [
+        {"step": "treatment", "product": "Vitamin C serum", "why": "Brightens and helps fade dark spots; also boosts sun protection.", "start": "Use every morning before sunscreen."}
+      ],
+      "night": [
+        {"step": "treatment", "product": "Niacinamide or azelaic acid serum", "why": "Helps reduce excess pigment gently.", "start": "Every night, or alternate nights at first."}
+      ],
+      "ingredients": ["Vitamin C", "Niacinamide", "Azelaic acid", "Alpha arbutin"],
+      "avoid": ["Skipping sunscreen — the sun makes dark spots darker", "Picking spots (it leaves marks)", "Unlabelled \"skin-whitening\" creams (some contain harmful mercury or steroids)"],
+      "tips": ["Daily sunscreen is the single most important step for dark spots.", "Spots usually fade slowly — expect 2–3 months."]
+    },
+    "wrinkles": {
+      "label": "Fine lines / wrinkles",
+      "morning": [],
+      "night": [
+        {"step": "treatment", "product": "Retinol serum (start with 0.2–0.3%)", "why": "Encourages skin renewal and smoother texture.", "start": "Start 2 nights a week; build up slowly over a month.", "tags": ["retinoid"]}
+      ],
+      "ingredients": ["Retinol", "Peptides", "Hyaluronic acid", "Vitamin C"],
+      "avoid": ["Using retinol and strong exfoliating acids on the same night", "Applying retinol on damp skin (it stings more)"],
+      "tips": ["Retinol makes skin more sun-sensitive — sunscreen every morning is a must.", "Mild dryness or flaking in the first weeks is common; use more moisturiser."]
+    },
+    "dark_circles": {
+      "label": "Dark circles",
+      "morning": [
+        {"step": "eye", "product": "Eye cream with caffeine or niacinamide", "why": "May make under-eye darkness and puffiness look less obvious.", "start": "Pat gently with your ring finger."}
+      ],
+      "night": [],
+      "ingredients": ["Caffeine", "Niacinamide", "Vitamin C"],
+      "avoid": ["Rubbing your eyes"],
+      "tips": ["Dark circles are often genetic or caused by thin skin and shadows — creams help only a little.", "Regular sleep and staying hydrated help; a colour-correcting concealer gives instant results."]
+    },
+    "redness": {
+      "label": "Redness / easily irritated",
+      "morning": [
+        {"step": "treatment", "product": "Soothing serum with centella asiatica or panthenol", "why": "Calms and supports irritated skin.", "start": "Morning and night."}
+      ],
+      "night": [
+        {"step": "treatment", "product": "Soothing serum with centella asiatica or panthenol", "why": "Calms and supports irritated skin."}
+      ],
+      "ingredients": ["Centella asiatica", "Panthenol (vitamin B5)", "Niacinamide (low strength, 2–4%)", "Ceramides"],
+      "avoid": ["Fragrance and essential oils", "Alcohol-based toners", "Hot water and steam"],
+      "tips": ["Redness that lasts, burns or keeps coming back should be checked by a doctor."]
+    },
+    "dullness": {
+      "label": "Dullness",
+      "morning": [
+        {"step": "treatment", "product": "Vitamin C serum", "why": "Adds brightness and protects from pollution.", "start": "Every morning before sunscreen."}
+      ],
+      "night": [
+        {"step": "treatment", "product": "Lactic acid (AHA) 5% — 1–2 nights a week", "why": "Gently removes dead skin cells for a smoother glow.", "start": "Never on the same night as retinol."}
+      ],
+      "ingredients": ["Vitamin C", "Lactic acid (AHA)", "Niacinamide"],
+      "avoid": ["Exfoliating more than 2–3 times a week"],
+      "tips": ["Sleep, water and daily sunscreen make a visible difference."]
+    },
+    "large_pores": {
+      "label": "Large-looking pores",
+      "morning": [
+        {"step": "treatment", "product": "Niacinamide serum (4–5%)", "why": "Helps control oil so pores look smaller.", "start": "Morning or night."}
+      ],
+      "night": [],
+      "ingredients": ["Niacinamide", "Salicylic acid (BHA)", "Clay mask (once a week)"],
+      "avoid": ["Heavy, pore-clogging oils"],
+      "tips": ["Pore size is mostly genetic — products can make pores look smaller, not remove them."]
+    }
+  },
+
+  "flags": {
+    "sensitive": {
+      "label": "Sensitive skin",
+      "avoid": ["Fragrance and essential oils", "Alcohol-based toners", "Physical scrubs"],
+      "tips": ["Patch test every new product on your inner arm or behind the ear for 24–48 hours first.", "Add only one new product every 2 weeks.", "Use the lowest strength of any active ingredient and start 2 nights a week."]
+    },
+    "pregnant": {
+      "label": "Pregnant or breastfeeding",
+      "remove_tags": ["retinoid"],
+      "remove_ingredients": ["Retinol"],
+      "replace": {
+        "retinoid": {"step": "treatment", "product": "Peptide serum (ask your doctor first)", "why": "A gentler option often chosen during pregnancy instead of retinol."}
+      },
+      "tips": ["Retinoids (retinol, tretinoin, adapalene) are usually avoided during pregnancy and breastfeeding.", "Please check every skincare product with your doctor or midwife."]
+    }
+  },
+
+  "age_groups": {
+    "under_18": {
+      "label": "Under 18",
+      "morning": [],
+      "night": [],
+      "ingredients": [],
+      "remove_tags": ["retinoid"],
+      "replace": {
+        "retinoid": {"step": "treatment", "product": "Niacinamide serum (4–5%)", "why": "A gentle, teen-friendly way to support smoother-looking skin."}
+      },
+      "tips": ["Keep it simple: a gentle cleanser, moisturiser and sunscreen are enough for most teenage skin.", "Hormones often cause breakouts at this age — be gentle and see a doctor if acne is painful or leaves marks.", "Retinol and strong acids aren't needed at this age unless a doctor recommends them."]
+    },
+    "18_24": {
+      "label": "18–24",
+      "morning": [],
+      "night": [],
+      "ingredients": [],
+      "tips": ["This is the best time to build habits: daily sunscreen now prevents most dark spots and early lines later."]
+    },
+    "25_34": {
+      "label": "25–34",
+      "morning": [],
+      "night": [],
+      "ingredients": ["Vitamin C", "Niacinamide"],
+      "tips": ["Skin renewal starts to slow from the mid-20s — an antioxidant like vitamin C in the morning helps protect it.", "If you'd like to start retinol for prevention, begin with a low strength (0.2–0.3%) twice a week."]
+    },
+    "35_44": {
+      "label": "35–44",
+      "morning": [],
+      "night": [
+        {"step": "treatment", "product": "Retinol serum (start with 0.2–0.3%)", "why": "Supports skin renewal and firmness, which slow down with age.", "start": "Start 2 nights a week; build up slowly over a month.", "tags": ["retinoid"]}
+      ],
+      "ingredients": ["Retinol", "Peptides", "Vitamin C", "Ceramides"],
+      "tips": ["Skin often gets a little drier after 35 — choose a slightly richer moisturiser if it feels tight.", "Remember your neck and the backs of your hands when applying sunscreen."]
+    },
+    "45_plus": {
+      "label": "45 and above",
+      "morning": [],
+      "night": [
+        {"step": "treatment", "product": "Retinol serum (start with 0.2–0.3%)", "why": "Supports skin renewal and firmness.", "start": "Start 2 nights a week; build up slowly over a month.", "tags": ["retinoid"]}
+      ],
+      "ingredients": ["Ceramides", "Peptides", "Retinol", "Hyaluronic acid", "Squalane"],
+      "tips": ["Skin makes less oil with age — a richer, ceramide-based moisturiser at night helps a lot.", "Hormonal changes (such as menopause) can make skin drier and more sensitive; patch test new products.", "Get a yearly skin check for any spots or moles that change."]
+    }
+  },
+
+  "tone_tips": {
+    "light": ["Lighter skin burns more easily — reapply sunscreen every 2 hours when outdoors."],
+    "medium": ["Medium skin can get dark marks after spots or sun — daily sunscreen helps keep tone even."],
+    "tan": ["Tan skin is prone to dark marks after breakouts — treat spots early and don't pick them.", "If a mineral sunscreen looks grey or white, try a tinted or chemical-filter SPF."],
+    "deep": ["Mineral sunscreens can leave a white cast on deep skin — tinted or chemical-filter SPF usually blends better.", "Deeper skin tones are more prone to dark marks after spots or irritation, so choose gentle actives and avoid picking."]
+  },
+
+  "dermatologist": {
+    "cystic_acne": "You mentioned deep, painful lumps. These can leave scars and usually need prescription treatment — please see a dermatologist.",
+    "many_acne": "If breakouts cover large areas or don't improve after 2–3 months of a consistent routine, please see a dermatologist.",
+    "changing_spot": "You mentioned a spot or mole that is changing, bleeding or itching. Please get it checked by a doctor soon — this app can't assess it.",
+    "persistent_redness": "Redness that lasts for weeks, burns or keeps returning is worth showing to a doctor."
+  },
+
+  "general_tips": [
+    "Use sunscreen every morning — even indoors near windows and on cloudy days.",
+    "Introduce new products one at a time so you can tell what works (or what irritates).",
+    "Give a routine 6–8 weeks before judging the results."
+  ]
+}

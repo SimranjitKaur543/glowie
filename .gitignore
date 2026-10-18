@@ -1,0 +1,23 @@
+# Python virtual environment (recreate it with requirements.txt)
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets — Kaggle / Roboflow API keys must never be uploaded
+.env
+kaggle.json
+.streamlit/secrets.toml
+
+# Datasets are large and have their own licences — don't upload them
+datasets/
+datasets_raw/
+*.zip
+
+# Training outputs (big files). Keep only the final models you need.
+runs/
+training/logs/
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db
