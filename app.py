@@ -8,6 +8,8 @@ from the cheeks → rule-based routine from your answers → on-screen report + 
 """
 
 import hashlib
+import html
+from pathlib import Path
 
 import streamlit as st
 
@@ -21,40 +23,67 @@ from utils.skin_tone import (TONE_ORDER, UNDERTONE_QUESTIONS, analyze_skin_tone,
 APP_NAME = "Glowie"
 TAGLINE = "your skin bestie"
 
-st.set_page_config(page_title=f"{APP_NAME} — {TAGLINE}", page_icon="🌿", layout="wide")
+st.set_page_config(page_title=f"{APP_NAME} — {TAGLINE}", page_icon="🌿", layout="wide",
+                   initial_sidebar_state="collapsed")
 rules = load_rules()
 
-# ---------------------------------------------------------------- sidebar
-with st.sidebar:
-    st.header(f"🌿 About {APP_NAME}")
-    st.write(f"{APP_NAME} is a final-year student project that looks at a selfie and suggests a simple "
-             "skincare routine made just for you.")
-    st.subheader("How it works")
-    st.markdown(
-        "1. **Face detection** (MediaPipe) finds your face and checks the photo quality.\n"
-        "2. **Skin tone** is measured from your cheeks using LAB colour and K-means clustering.\n"
-        "3. **Your answers** about skin type and concerns choose a routine from a set of rules."
-    )
-    st.subheader("Privacy")
-    st.write("Your photo is processed in memory on the server running this app and is **not saved**. "
-             "Nothing is sent to any other service.")
-    st.subheader("Disclaimer")
-    st.caption(DISCLAIMER)
-
-# ---------------------------------------------------------------- header
-st.title(f"🌿 {APP_NAME}")
-st.markdown(f"<p style='font-size:1.25rem;color:#68764B;margin-top:-12px'><em>{TAGLINE} ✨</em></p>",
+# ---------------------------------------------------------------- look & feel (UI only)
+# All styling lives in assets/style.css so it can be changed without touching this file.
+st.markdown(f"<style>{(Path(__file__).parent / 'assets' / 'style.css').read_text(encoding='utf-8')}</style>",
             unsafe_allow_html=True)
-st.write("Take or upload a selfie, tell me a little about your skin, and I'll find your skin tone, "
-         "a foundation shade range and a morning & night routine just for you.")
+
+
+def section_title(number, title):
+    """A small numbered heading used at the top of each card."""
+    st.markdown(f"<div class='section-title'><span class='num'>{number}</span><h3>{title}</h3></div>",
+                unsafe_allow_html=True)
+
+
+def footer():
+    """About, privacy and disclaimer — shown at the bottom of every page state."""
+    st.divider()
+    with st.expander(f"About {APP_NAME} · Privacy · Disclaimer"):
+        st.markdown(
+            f"**About.** {APP_NAME} is a final-year student project that looks at a selfie and suggests a simple "
+            "skincare routine made just for you.\n\n"
+            "**How it works.** 1) *Face detection* (MediaPipe) finds your face and checks the photo quality. "
+            "2) *Skin tone* is measured from your cheeks using LAB colour and K-means clustering. "
+            "3) *Your answers* about skin type and concerns choose a routine from a set of rules.\n\n"
+            "**Privacy.** Your photo is processed in memory on the server running this app and is **not saved**. "
+            "Nothing is sent to any other service.")
+        st.caption(DISCLAIMER)
+    st.markdown(f"<div class='glowie-footer'><div class='brand'>{APP_NAME.lower()} ✨</div>"
+                f"{TAGLINE} · a student project · not a medical device</div>", unsafe_allow_html=True)
+
+
+def stop():
+    """End the page early, but still show the footer."""
+    footer()
+    st.stop()
+
+
+# ---------------------------------------------------------------- hero + how it works
+st.markdown(
+    f"""<div class="glowie-hero">
+          <h1>{APP_NAME.lower()} ✨</h1>
+          <p class="tagline">{TAGLINE}</p>
+          <p class="intro">Take or upload a selfie, tell me a little about your skin, and I'll find your skin tone,
+          a foundation shade range and a morning &amp; night routine just for you.</p>
+        </div>
+        <div class="glowie-steps">
+          <div class="glowie-step"><span class="num">1</span>Snap a selfie<span class="arrow">→</span></div>
+          <div class="glowie-step"><span class="num">2</span>Tell me about your skin<span class="arrow">→</span></div>
+          <div class="glowie-step"><span class="num">3</span>Get your routine</div>
+        </div>""",
+    unsafe_allow_html=True)
 st.info("**Not a medical diagnosis.** For severe acne or any unusual or changing skin problem, "
         "please see a dermatologist.", icon="ℹ️")
 
 left, right = st.columns(2, gap="large")
 
 # ---------------------------------------------------------------- 1. photo
-with left:
-    st.subheader("1. Your photo")
+with left, st.container(border=True):
+    section_title(1, "Your photo")
     source = st.radio("Photo source", ["Upload a selfie", "Use the webcam"], horizontal=True,
                       label_visibility="collapsed")
     if source == "Upload a selfie":
@@ -68,8 +97,8 @@ with left:
                     "- Move your hair away from your cheeks.")
 
 # ---------------------------------------------------------------- 2. questions
-with right:
-    st.subheader("2. About your skin")
+with right, st.container(border=True):
+    section_title(2, "About your skin")
     type_labels = {"Not sure — help me decide": None, "Oily": "oily", "Dry": "dry",
                    "Normal": "normal", "Combination (oily T-zone, normal/dry cheeks)": "combination"}
     choice = st.selectbox("What is your skin type?", list(type_labels))
@@ -119,15 +148,15 @@ profile = {"skin_type": skin_type, "concerns": concerns, "acne_level": acne_leve
            "age_group": age_group}
 
 # ---------------------------------------------------------------- 3. analyse
-st.divider()
+st.write("")
 photo_id = hashlib.md5(photo.getvalue()).hexdigest() if photo is not None else None
-if st.button("🔍 Analyse my skin", type="primary", disabled=photo is None, width="stretch"):
+if st.button("Analyse my skin ✨", type="primary", disabled=photo is None, width="stretch"):
     with st.spinner("Finding your face and measuring your skin tone…"):
         try:
             image = load_image(photo)
         except Exception:
-            st.error("That file couldn't be opened as an image. Please try a JPG or PNG photo.")
-            st.stop()
+            st.warning("That file couldn't be opened as an image. Please try a JPG or PNG photo.")
+            stop()
         check = check_photo(image)
         tone = analyze_skin_tone(image) if check.ok else None
         lines = measure_lines(image) if check.ok else None
@@ -136,25 +165,27 @@ if st.button("🔍 Analyse my skin", type="primary", disabled=photo is None, wid
 analysis = st.session_state.get("analysis")
 if photo is None:
     st.caption("Add a photo above to start.")
-    st.stop()
+    stop()
 if not analysis or analysis["id"] != photo_id:
     st.caption("Press **Analyse my skin** when you're ready.")
-    st.stop()
+    stop()
 
 check, tone, lines = analysis["check"], analysis["tone"], analysis.get("lines")
 
 # Photo problems → explain how to retake it, and stop.
 if not check.ok:
-    st.error("We couldn't analyse this photo. Please retake it:")
+    st.warning("We couldn't analyse this photo. Please retake it:")
     for problem, fix in check.problems:
         st.markdown(f"- **{problem}** {fix}")
     st.image(draw_face_box(check.image, check.face_box), caption="Your photo", width=360)
-    st.stop()
+    stop()
 
 # ---------------------------------------------------------------- 4. results
-st.header("Your results")
+st.write("")
+st.markdown("<h2>Your results</h2>", unsafe_allow_html=True)
 col_img, col_tone = st.columns([1, 1.4], gap="large")
-with col_img:
+with col_img, st.container(border=True):
+    section_title("📷", "Your photo")
     annotated = draw_face_box(check.image, check.face_box)
     if tone and tone.regions:
         annotated = draw_regions(annotated, tone.regions)
@@ -170,14 +201,12 @@ with col_img:
     if lines and lines.message:
         st.caption("• " + lines.message)
 
-with col_tone:
-    st.subheader("Skin tone & undertone")
+with col_tone, st.container(border=True):
+    section_title("🎨", "Skin tone & undertone")
     if tone and tone.ok:
         st.markdown(
-            f"<div style='display:flex;align-items:center;gap:14px;margin-bottom:8px'>"
-            f"<div style='width:64px;height:64px;border-radius:50%;background:{tone.hex_color};"
-            f"border:2px solid #E4DFD2'></div>"
-            f"<div>Your measured cheek colour<br><code>{tone.hex_color}</code></div></div>",
+            f"<div class='tone-swatch-row'><div class='tone-swatch' style='background:{tone.hex_color}'></div>"
+            f"<div><div class='label'>Your measured cheek colour</div><code>{tone.hex_color}</code></div></div>",
             unsafe_allow_html=True)
 
         # Warnings that affect the result go first and stand out.
@@ -207,9 +236,10 @@ with col_tone:
                        f"**{tone.photo_undertone}**. Your answers are used — they're more reliable than a photo.")
         elif not answered_undertone:
             st.caption("For a more reliable undertone, answer the 3 quick questions in *Know your undertone better* above.")
-        st.markdown(f"**Foundation shade range:** {tone.foundation['summary']}  \n"
-                    f"Look for shades marked **{tone.foundation['undertone']}**.  \n"
-                    f"_{tone.foundation['tip']}_")
+        st.markdown(f"<div class='foundation-box'><b>Foundation shade range:</b> "
+                    f"{html.escape(tone.foundation['summary'])}<br>"
+                    f"Look for shades marked <b>{html.escape(tone.foundation['undertone'])}</b>.<br>"
+                    f"<i>{html.escape(tone.foundation['tip'])}</i></div>", unsafe_allow_html=True)
         with st.expander("How was this measured?"):
             st.markdown(
                 f"- Main cheek colour (K-means, LAB): L = {tone.lab[0]}, a = {tone.lab[1]}, b = {tone.lab[2]}\n"
@@ -229,37 +259,44 @@ with col_tone:
 
 # ---------------------------------------------------------------- 5. routine
 rec = build_routine(profile, tone.tone if tone and tone.ok else None)
-st.header("Your skincare routine")
-st.caption(f"Skin type: **{rec.skin_type_label}** · Age group: **{rec.age_group_label or 'not given'}** · "
-           f"Concerns: **{', '.join(rec.concerns) if rec.concerns else 'none selected'}** — "
-           "based on your answers (skin type, age and concerns are not detected from the photo).")
 age_warning = age_mismatch_warning(lines, age_group, rec.age_group_label)
-if age_warning:
-    st.warning("🎂 " + age_warning)
-for message in rec.see_doctor:
-    st.warning("🩺 " + message)
 
 
 def show_steps(steps):
+    """Each routine step as a numbered mini-card (text escaped, so it can't break the page)."""
     for n, s in enumerate(steps, 1):
-        st.markdown(f"**{n}. {s['product']}**  \n{s['why']}" + (f"  \n_How: {s['start']}_" if s.get("start") else ""))
+        how = f"<div class='how'>How: {html.escape(s['start'])}</div>" if s.get("start") else ""
+        st.markdown(f"<div class='step-card'><span class='n'>{n}</span><div>"
+                    f"<div class='what'>{html.escape(s['product'])}</div>"
+                    f"<div class='why'>{html.escape(s['why'])}</div>{how}</div></div>", unsafe_allow_html=True)
 
 
-morning, night, ingredients, tips = st.tabs(["☀️ Morning", "🌙 Night", "🧪 Ingredients", "💡 Tips"])
-with morning:
-    show_steps(rec.morning)
-with night:
-    show_steps(rec.night)
-with ingredients:
-    c1, c2 = st.columns(2)
-    c1.markdown("**✅ Look for**\n" + "\n".join(f"- {i}" for i in rec.use))
-    c2.markdown("**🚫 Avoid**\n" + "\n".join(f"- {i}" for i in rec.avoid))
-with tips:
-    st.markdown("\n".join(f"- {t}" for t in rec.tips))
+st.write("")
+with st.container(border=True):
+    section_title("🌸", "Your skincare routine")
+    st.caption(f"Skin type: **{rec.skin_type_label}** · Age group: **{rec.age_group_label or 'not given'}** · "
+               f"Concerns: **{', '.join(rec.concerns) if rec.concerns else 'none selected'}** — "
+               "based on your answers (skin type, age and concerns are not detected from the photo).")
+    if age_warning:
+        st.warning("🎂 " + age_warning)
+    for message in rec.see_doctor:
+        st.error("🩺 " + message)        # medical advice → soft rose box
+
+    morning, night, ingredients, tips = st.tabs(["☀️ Morning", "🌙 Night", "🧪 Ingredients", "💡 Tips"])
+    with morning:
+        show_steps(rec.morning)
+    with night:
+        show_steps(rec.night)
+    with ingredients:
+        c1, c2 = st.columns(2)
+        c1.markdown("**✅ Look for**\n" + "\n".join(f"- {i}" for i in rec.use))
+        c2.markdown("**🚫 Avoid**\n" + "\n".join(f"- {i}" for i in rec.avoid))
+    with tips:
+        st.markdown("\n".join(f"- {t}" for t in rec.tips))
 
 # ---------------------------------------------------------------- 6. PDF
-st.divider()
+st.write("")
 pdf_bytes = build_pdf(check.face_crop, tone, rec, profile, lines, age_warning)
 st.download_button("📄 Download my report (PDF)", data=pdf_bytes, file_name="skincare_report.pdf",
-                   mime="application/pdf", type="primary")
-st.caption(DISCLAIMER)
+                   mime="application/pdf", type="primary", width="stretch")
+footer()

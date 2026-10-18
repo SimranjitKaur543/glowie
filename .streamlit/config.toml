@@ -1,10 +1,15 @@
-# Olive Green + Warm Cream theme and privacy-friendly settings.
+# Glowie theme (soft "clean girl" palette) and privacy-friendly settings.
+# The detailed styling lives in assets/style.css.
 [theme]
-primaryColor = "#68764B"
-backgroundColor = "#FAF7EF"
-secondaryBackgroundColor = "#E8EBDD"
-textColor = "#303A2C"
+primaryColor = "#DC867C"              # blush: buttons, highlights
+backgroundColor = "#DDE8D4"           # soft sage-tinted page
+secondaryBackgroundColor = "#FFFFFF"  # white inputs / panels
+textColor = "#4A3B35"                 # cocoa brown
 font = "sans serif"
+
+[client]
+toolbarMode = "minimal"     # hides the Deploy button and developer menu
+showSidebarNavigation = false
 
 [server]
 maxUploadSize = 15          # MB — photos larger than this are rejected

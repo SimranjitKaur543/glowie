@@ -1,0 +1,293 @@
+/* =====================================================================
+   Glowie — "your skin bestie" stylesheet
+   Loaded once by app.py. Only changes how things LOOK, never what they do.
+
+   Palette (v4 — deeper, brighter sage + coral-blush, green page)
+     page     #DDE8D4   soft sage-tinted page background
+     cream    #EFF4EA   light sage-cream inner boxes (badges, step cards, fields)
+     white    #FFFFFF   cards
+     blush    #DC867C   hero + primary buttons (blended with sage)
+     blush-dk #D37C72   button hover
+     sage     #6F9B63   icons, selected states, small details
+     sage-mid #5E8A53   ticks, arrows, stronger accents
+     cocoa    #4A3B35   headings + body text
+     taupe    #6E5F58   small labels; captions #665750; ink #30241F on gradients
+     peach    #FCEBDD   general warnings
+     rose     #F9E0E0   medical warnings
+   Fonts: Playfair Display (headings), DM Sans (body)
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
+
+:root {
+  --page: #DDE8D4;           /* greenish page background */
+  --cream: #EFF4EA;          /* inner boxes — light sage-cream */
+  --white: #FFFFFF;
+  --blush: #DC867C;
+  --blush-dark: #D37C72;
+  --blush-soft: #F7D5D0;
+  --sage: #6F9B63;
+  --sage-mid: #5E8A53;       /* stronger sage for ticks/arrows (still soft, not dark green) */
+  --sage-light: #B5CFA9;     /* number circles, selected tab */
+  --sage-soft: #D8E7D0;
+  /* the signature green → pink blend (deeper and brighter) */
+  --glow-gradient: linear-gradient(120deg, #93BD85 0%, #C6C196 45%, #E19F93 75%, var(--blush) 100%);
+  --button-gradient: linear-gradient(100deg, #8DB77F 0%, #CDA68F 50%, var(--blush) 100%);
+  --cocoa: #4A3B35;
+  --ink: #30241F;            /* deeper cocoa for text on the brighter gradients (≥ 4.9:1) */
+  --taupe: #6E5F58;          /* small labels — deep enough for ≥ 4.5:1 on cream and page */
+  --taupe-text: #665750;     /* caption text — ≥ 4.9:1 on page, cream and white */
+  --peach: #FCEBDD;
+  --rose: #F9E0E0;
+  --line: #CADBBF;
+  --radius: 20px;
+  --shadow: 0 2px 6px rgba(74, 59, 53, 0.04), 0 10px 30px rgba(74, 59, 53, 0.06);
+}
+
+/* ---------- Base: fonts and colours ---------- */
+html, body, [class*="css"], .stApp, .stMarkdown, p, li, label, input, textarea, button, select {
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.stApp { background: linear-gradient(180deg, #CFE0C4 0%, var(--page) 480px) fixed; color: var(--cocoa); }
+/* Bold / italic text otherwise falls back to Streamlit's default font.
+   (Only text tags — NOT every span: Streamlit's icons are spans that need their icon font.) */
+.stApp b, .stApp strong, .stApp i, .stApp em { font-family: inherit; }
+[data-testid="stIconMaterial"] { font-family: "Material Symbols Rounded" !important; }
+.stMarkdown, [data-testid="stMarkdownContainer"] { font-family: "DM Sans", system-ui, sans-serif; }
+h1, h2, h3, h4,
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4 {
+  font-family: "Playfair Display", Georgia, serif !important;
+  color: var(--cocoa) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+}
+/* Captions: Streamlit draws them at 60% opacity — use full opacity and a slightly deeper
+   grey-brown so small text stays readable (#75665F ≈ 5.5:1 on white; #8A7B74 is only ≈ 4.1:1). */
+[data-testid="stCaptionContainer"], .stCaption, small { color: var(--taupe-text) !important; opacity: 1 !important; }
+[data-testid="stCaptionContainer"] p { color: var(--taupe-text) !important; }
+a { color: var(--cocoa); }
+
+/* Hide the little link icon Streamlit adds next to headings */
+[data-testid="stHeaderActionElements"], .stMarkdown h1 a, .stMarkdown h2 a, .stMarkdown h3 a { display: none !important; }
+
+/* ---------- Hide Streamlit's own chrome (menu, Deploy, header bar, footer) ---------- */
+#MainMenu, footer, header[data-testid="stHeader"], [data-testid="stToolbar"],
+[data-testid="stDecoration"], [data-testid="stStatusWidget"], .stDeployButton,
+[data-testid="stAppDeployButton"], [data-testid="stSidebarCollapsedControl"] {
+  display: none !important;
+}
+
+/* Comfortable, centred page width */
+[data-testid="stMainBlockContainer"], .block-container {
+  max-width: 1080px;
+  padding-top: 1.5rem !important;
+  padding-bottom: 3rem !important;
+}
+
+/* ---------- Hero ---------- */
+.glowie-hero {
+  background: var(--glow-gradient);
+  border-radius: 28px;
+  padding: 44px 40px 40px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.glowie-hero h1 {
+  font-size: clamp(2.6rem, 7vw, 3.8rem) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.05;
+}
+.glowie-hero .tagline {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  margin: 6px 0 14px;
+  color: var(--ink);
+}
+.glowie-hero .intro { max-width: 560px; font-size: 1.02rem; line-height: 1.6; margin: 0; color: var(--ink); }
+
+/* ---------- How it works ---------- */
+.glowie-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0 8px; }
+.glowie-step {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 500;
+}
+.glowie-step .num {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--sage-light); color: var(--cocoa); font-weight: 700;
+}
+.glowie-step .arrow { color: var(--sage-mid); margin-left: auto; font-size: 1.1rem; font-weight: 700; }
+@media (max-width: 640px) {
+  .glowie-steps { grid-template-columns: 1fr; }
+  .glowie-step .arrow { display: none; }
+  .glowie-hero { padding: 32px 22px 28px; }
+}
+
+/* ---------- Cards ----------
+   In Streamlit 1.50 a st.container(border=True) is a plain stVerticalBlock. Our cards are the
+   blocks that directly contain a .section-title heading, so we style exactly those. */
+[data-testid="stVerticalBlock"]:has(> [data-testid="stElementContainer"] .section-title) {
+  background: var(--white);
+  border: none !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow);
+  padding: 22px 22px 18px !important;
+  position: relative;
+  overflow: hidden;
+}
+/* thin sage → blush line along the top of every card */
+[data-testid="stVerticalBlock"]:has(> [data-testid="stElementContainer"] .section-title)::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px;
+  background: var(--glow-gradient);
+}
+.section-title { display: flex; align-items: center; gap: 10px; margin: 2px 0 6px; }
+.section-title .num {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--sage-light); color: var(--cocoa);
+  font: 700 0.95rem "DM Sans", sans-serif;
+}
+.section-title h3 { margin: 0 !important; padding: 0 !important; font-size: 1.45rem !important; }
+
+/* ---------- Buttons ---------- */
+.stButton > button, .stDownloadButton > button, [data-testid^="stBaseButton"] {
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  min-height: 48px;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+[data-testid="stBaseButton-primary"] {
+  background: var(--button-gradient) !important;   /* sage → blush */
+  border: none !important;
+  color: var(--ink) !important;         /* deep ink on sage/blush ≥ 4.9:1 contrast (white would fail) */
+  font-size: 1.08rem !important;
+  min-height: 56px;
+  box-shadow: 0 6px 18px rgba(111, 155, 99, 0.35);
+}
+[data-testid="stBaseButton-primary"] p { font-size: 1.1rem !important; font-weight: 600 !important; color: var(--ink) !important; }
+[data-testid="stBaseButton-primary"]:hover {
+  background: linear-gradient(100deg, #94BC87 0%, #D0AA95 50%, var(--blush-dark) 100%) !important;
+  color: var(--ink) !important;
+}
+[data-testid="stBaseButton-primary"]:disabled {
+  background: #D3DFCB !important; color: #5F5650 !important; box-shadow: none; cursor: not-allowed;
+}
+[data-testid="stBaseButton-secondary"] {
+  background: var(--white) !important; border: 1.5px solid var(--line) !important; color: var(--cocoa) !important;
+}
+[data-testid="stBaseButton-secondary"]:hover { border-color: var(--sage) !important; }
+
+/* ---------- Keyboard focus: always visible ---------- */
+button:focus-visible, input:focus-visible, textarea:focus-visible, [role="radio"]:focus-visible,
+[role="tab"]:focus-visible, [role="checkbox"]:focus-visible, summary:focus-visible, a:focus-visible,
+[data-baseweb="select"]:focus-within {
+  outline: 3px solid var(--cocoa) !important;
+  outline-offset: 2px !important;
+  border-radius: 10px;
+}
+
+/* ---------- Form fields ---------- */
+[data-baseweb="select"] > div, [data-testid="stFileUploaderDropzone"] {
+  border-radius: 14px !important;
+  background: var(--cream) !important;
+  border-color: var(--line) !important;
+}
+[data-testid="stFileUploaderDropzone"] { border: 2px dashed #A6C698 !important; }
+[data-baseweb="tag"] { background: var(--sage-light) !important; color: var(--cocoa) !important; border-radius: 999px !important; }
+[data-baseweb="tag"] span { color: var(--cocoa) !important; }
+[data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label { font-weight: 500; color: var(--cocoa) !important; }
+
+/* ---------- Expanders ---------- */
+[data-testid="stExpander"] details {
+  border: 1px solid var(--line) !important;
+  border-radius: 14px !important;
+  background: var(--cream);
+}
+[data-testid="stExpander"] summary { font-weight: 500; color: var(--cocoa); }
+[data-testid="stExpander"] summary svg, [data-testid="stExpander"] [data-testid="stIconMaterial"] { color: var(--sage-mid) !important; }
+
+/* ---------- Alerts ---------- */
+[data-testid="stAlertContainer"] { border-radius: 16px !important; border: none !important; color: var(--cocoa) !important; }
+[data-testid="stAlertContainer"] p, [data-testid="stAlertContainer"] li { color: var(--cocoa) !important; }
+[data-testid="stAlertContentWarning"], [data-testid="stAlertContainer"]:has([data-testid="stAlertContentWarning"]) { background: var(--peach) !important; }
+[data-testid="stAlertContentError"], [data-testid="stAlertContainer"]:has([data-testid="stAlertContentError"]) { background: var(--rose) !important; }
+[data-testid="stAlertContentInfo"], [data-testid="stAlertContainer"]:has([data-testid="stAlertContentInfo"]) { background: var(--sage-soft) !important; }
+
+/* ---------- Metrics → small soft badges ---------- */
+[data-testid="stMetric"] {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 10px 14px;
+}
+[data-testid="stMetricLabel"] p { color: var(--taupe) !important; font-size: 0.82rem !important; }
+[data-testid="stMetricValue"] { color: var(--cocoa) !important; font-size: 1.45rem !important; font-weight: 600; }
+/* Never cut off metric labels/values with "…" — let labels wrap and keep numbers whole */
+[data-testid="stMetricLabel"], [data-testid="stMetricLabel"] div, [data-testid="stMetricLabel"] p {
+  white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
+}
+[data-testid="stMetricValue"], [data-testid="stMetricValue"] div {
+  overflow: visible !important; text-overflow: clip !important; white-space: nowrap;
+}
+/* Narrow columns (e.g. the photo card's 3 quality badges): smaller numbers, tighter padding */
+[data-testid="stColumn"] [data-testid="stColumn"] [data-testid="stMetric"] { padding: 8px 10px; }
+[data-testid="stColumn"] [data-testid="stColumn"] [data-testid="stMetricValue"] { font-size: 1.15rem !important; }
+[data-testid="stMetricDelta"] { color: var(--taupe) !important; }
+[data-testid="stMetricDelta"] svg { display: none; }
+
+/* ---------- Radios and checkboxes: sage when selected ----------
+   The circle/box is the FIRST child of the label, before the hidden <input>. */
+label[data-baseweb="radio"]:has(input:checked) > div:first-child,
+label[data-baseweb="checkbox"]:has(input:checked) > span:first-child {
+  background-color: var(--sage-mid) !important;
+  border-color: var(--sage-mid) !important;
+}
+
+/* ---------- Tabs ---------- */
+[data-testid="stTabs"] [role="tablist"] { gap: 6px; border-bottom: none; flex-wrap: wrap; }
+[data-testid="stTabs"] [role="tab"] {
+  background: var(--cream); border-radius: 999px; padding: 8px 18px; border: none; color: var(--cocoa);
+}
+[data-testid="stTabs"] [role="tab"][aria-selected="true"] { background: var(--sage-light); font-weight: 700; }
+[data-testid="stTabs"] [data-baseweb="tab-highlight"], [data-testid="stTabs"] [data-baseweb="tab-border"] { display: none; }
+
+/* ---------- Results pieces ---------- */
+.tone-swatch-row { display: flex; align-items: center; gap: 16px; margin: 4px 0 12px; }
+.tone-swatch {
+  width: 78px; height: 78px; border-radius: 50%; flex: none;
+  border: 4px solid var(--white); box-shadow: 0 0 0 1.5px var(--line), var(--shadow);
+}
+.tone-swatch-row .label { color: var(--taupe); font-size: 0.9rem; }
+.tone-swatch-row code { background: var(--cream); color: var(--cocoa); border-radius: 8px; padding: 2px 8px; }
+/* brand blend, so it never looks like the rose medical box */
+.foundation-box { background: linear-gradient(120deg, #E2EEDA 0%, var(--blush-soft) 100%);
+ border-radius: 16px; padding: 14px 16px; margin: 10px 0 8px; line-height: 1.55; }
+
+/* Routine steps as numbered mini-cards */
+.step-card {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--cream); border-radius: 16px; padding: 14px 16px; margin: 0 0 10px;
+}
+.step-card .n {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--sage-light); color: var(--cocoa); font-weight: 700;
+}
+.step-card .what { font-weight: 700; color: var(--cocoa); }
+.step-card .why { color: var(--cocoa); margin-top: 2px; }
+.step-card .how { color: var(--taupe); font-style: italic; font-size: 0.92rem; margin-top: 4px; }
+
+/* Images: rounded */
+[data-testid="stImage"] img { border-radius: 16px; max-width: 100% !important; height: auto !important; }
+[data-testid="stImage"], [data-testid="stImageContainer"] { max-width: 100% !important; }
+
+/* ---------- Footer ---------- */
+.glowie-footer { text-align: center; color: var(--taupe); font-size: 0.88rem; margin-top: 8px; }
+.glowie-footer .brand { font-family: "Playfair Display", Georgia, serif; font-size: 1.2rem; color: var(--cocoa); }
+
+/* Divider */
+hr { border-color: var(--line) !important; }
